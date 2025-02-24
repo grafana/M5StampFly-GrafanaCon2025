@@ -31,7 +31,7 @@
 
 // esp_now_peer_info_t slave;
 
-volatile uint16_t Connect_flag = 0;
+volatile uint16_t Connect_flag = 0; 
 
 // Telemetry相手のMAC ADDRESS 4C:75:25:AD:B6:6C
 // ATOM Lite (C): 4C:75:25:AE:27:FC
@@ -45,6 +45,8 @@ volatile uint8_t MyMacAddr[6];
 volatile uint8_t peer_command[4] = {0xaa, 0x55, 0x16, 0x88};
 volatile uint8_t Rc_err_flag     = 0;
 esp_now_peer_info_t peerInfo;
+
+u_int8_t global_channel = 8;
 
 // RC
 volatile float Stick[16];
@@ -63,7 +65,7 @@ void OnDataRecv(const uint8_t *mac_addr, const uint8_t *recv_data, int data_len)
     if (!TelemAddr[0] && !TelemAddr[1] && !TelemAddr[2] && !TelemAddr[3] && !TelemAddr[4] && !TelemAddr[5]) {
         memcpy(TelemAddr, mac_addr, 6);
         memcpy(peerInfo.peer_addr, TelemAddr, 6);
-        peerInfo.channel = CHANNEL;
+        peerInfo.channel = global_channel;
         peerInfo.encrypt = false;
         if (esp_now_add_peer(&peerInfo) != ESP_OK) {
             USBSerial.println("Failed to add peer2");
@@ -153,8 +155,10 @@ void rc_init(void) {
     for (uint8_t i = 0; i < 16; i++) Stick[i] = 0.0;
 
     // ESP-NOW初期化
+    //int WiFi_channel = WiFi.channel();
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
+    
 
     WiFi.macAddress((uint8_t *)MyMacAddr);
     USBSerial.printf("MAC ADDRESS: %02X:%02X:%02X:%02X:%02X:%02X\r\n", MyMacAddr[0], MyMacAddr[1], MyMacAddr[2],
@@ -170,13 +174,23 @@ void rc_init(void) {
     // MACアドレスブロードキャスト
     uint8_t addr[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
     memcpy(peerInfo.peer_addr, addr, 6);
-    peerInfo.channel = CHANNEL;
+    //peerInfo.channel = CHANNEL;
+    peerInfo.channel = global_channel;
     peerInfo.encrypt = false;
     if (esp_now_add_peer(&peerInfo) != ESP_OK) {
         USBSerial.println("Failed to add peer");
         return;
     }
-    esp_wifi_set_channel(CHANNEL, WIFI_SECOND_CHAN_NONE);
+    esp_wifi_set_channel(global_channel, WIFI_SECOND_CHAN_NONE);
+
+    wifi_second_chan_t secondChan;
+    uint8_t channel;
+    esp_wifi_get_channel(&channel, &secondChan); // Get the channel dynamically
+
+    USBSerial.print("Using ESP-NOW on Channel: ");
+    USBSerial.println(channel);
+    //USBSerial.print("Current Wi-Fi Channel: ");
+    //USBSerial.println(WiFi_channel);
 
     // Send my MAC address
     for (uint16_t i = 0; i < 50; i++) {
@@ -202,7 +216,7 @@ void rc_init(void) {
 
 void send_peer_info(void) {
     uint8_t data[11];
-    data[0] = CHANNEL;
+    data[0] = global_channel;
     memcpy(&data[1], (uint8_t *)MyMacAddr, 6);
     memcpy(&data[1 + 6], (uint8_t *)peer_command, 4);
     esp_now_send(peerInfo.peer_addr, data, 11);

@@ -32,25 +32,9 @@
 // MPU6886_ADDRESS           0x68
 // BMP280_ADDRESS            0x76
 
-// Wi-Fi credentials
-const char* ssid = ""; // Use a 2.4Ghz Wi-Fi hotspot
-const char* password = "";
-
 void setup() {
     init_copter();
     delay(100);
-
-    // Connect to Wi-Fi (Station Mode)
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
-    Serial.print("Connecting to Wi-Fi");
-    while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
-        delay(1000);
-    }
-    Serial.println("\nWi-Fi connected!");
-    Serial.print("IP Address: ");
-    Serial.println(WiFi.localIP());
 }
 
 void loop() {

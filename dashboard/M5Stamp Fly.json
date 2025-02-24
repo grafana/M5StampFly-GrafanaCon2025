@@ -25,6 +25,12 @@
     },
     {
       "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
       "id": "timeseries",
       "name": "Time series",
       "version": ""
@@ -108,7 +114,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "degree"
         },
         "overrides": []
       },
@@ -119,6 +126,7 @@
         "y": 0
       },
       "id": 1,
+      "interval": "1s",
       "options": {
         "legend": {
           "calcs": [],
@@ -141,14 +149,14 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "m5stampFly_Accel_z{location=\"home\"}",
+          "expr": "m5stampFly_roll{location=\"home\"}",
           "instant": false,
           "legendFormat": "{{__name__}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New Panel",
+      "title": "Roll Angle",
       "type": "timeseries"
     },
     {
@@ -207,7 +215,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "degree"
         },
         "overrides": [
           {
@@ -217,7 +226,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "m5stampFly_Accel_x"
+                  "m5stampFly_pitch"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -243,6 +252,7 @@
         "y": 0
       },
       "id": 2,
+      "interval": "1s",
       "options": {
         "legend": {
           "calcs": [],
@@ -264,14 +274,14 @@
             "uid": "${DS_GRAFANACLOUD-WILLIEENGELBRECHTDEV-PROM}"
           },
           "editorMode": "code",
-          "expr": "m5stampFly_Accel_x{location=\"home\"}",
+          "expr": "m5stampFly_pitch{location=\"home\"}",
           "instant": false,
           "legendFormat": "{{__name__}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New Panel",
+      "title": "PItch Angle",
       "type": "timeseries"
     },
     {
@@ -330,7 +340,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "degree"
         },
         "overrides": []
       },
@@ -341,6 +352,7 @@
         "y": 0
       },
       "id": 3,
+      "interval": "1s",
       "options": {
         "legend": {
           "calcs": [],
@@ -362,14 +374,14 @@
             "uid": "${DS_GRAFANACLOUD-WILLIEENGELBRECHTDEV-PROM}"
           },
           "editorMode": "code",
-          "expr": "m5stampFly_Accel_y{location=\"home\"}",
+          "expr": "m5stampFly_yaw{location=\"home\"}",
           "instant": false,
           "legendFormat": "{{__name__}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New Panel",
+      "title": "Yaw Angle",
       "type": "timeseries"
     },
     {
@@ -439,6 +451,7 @@
         "y": 7
       },
       "id": 4,
+      "interval": "1s",
       "options": {
         "legend": {
           "calcs": [],
@@ -460,14 +473,14 @@
             "uid": "${DS_GRAFANACLOUD-WILLIEENGELBRECHTDEV-PROM}"
           },
           "editorMode": "code",
-          "expr": "m5stampFly_Pitch_angle{location=\"home\"}",
+          "expr": "m5stampFly_alt_flag{location=\"home\"}",
           "instant": false,
           "legendFormat": "{{__name__}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New Panel",
+      "title": "Altitude Flag",
       "type": "timeseries"
     },
     {
@@ -478,42 +491,52 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-background"
             },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "inspect": false
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "purple",
+                  "index": 0,
+                  "text": "INIT_MODE"
+                },
+                "1": {
+                  "color": "blue",
+                  "index": 1,
+                  "text": "AVERAGE_MODE"
+                },
+                "2": {
+                  "color": "green",
+                  "index": 2,
+                  "text": "FLIGHT_MODE"
+                },
+                "3": {
+                  "color": "yellow",
+                  "index": 3,
+                  "text": "PARKING_MODE"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "LOG_MODE"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "AUTO_LANDING_MODE"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -522,8 +545,28 @@
                 "value": null
               },
               {
+                "color": "purple",
+                "value": 0
+              },
+              {
+                "color": "blue",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 2
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 5
               }
             ]
           }
@@ -537,18 +580,18 @@
         "y": 7
       },
       "id": 5,
+      "interval": "1s",
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
         },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
+        "showHeader": true
       },
       "pluginVersion": "11.5.0-81311",
       "targets": [
@@ -558,15 +601,32 @@
             "uid": "${DS_GRAFANACLOUD-WILLIEENGELBRECHTDEV-PROM}"
           },
           "editorMode": "code",
-          "expr": "m5stampFly_Pitch_rate{location=\"home\"}",
-          "instant": false,
+          "exemplar": false,
+          "expr": "m5stampFly_fly_mode{location=\"home\"}",
+          "instant": true,
           "legendFormat": "{{__name__}}",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "New Panel",
-      "type": "timeseries"
+      "title": "Flight Mode",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "m5stampFly_fly_mode": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "m5stampFly_fly_mode": "Current Drone Mode"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": {
@@ -624,7 +684,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "volt"
         },
         "overrides": []
       },
@@ -635,6 +696,7 @@
         "y": 7
       },
       "id": 6,
+      "interval": "1s",
       "options": {
         "legend": {
           "calcs": [],
@@ -663,7 +725,7 @@
           "refId": "A"
         }
       ],
-      "title": "New Panel",
+      "title": "Battery Voltage",
       "type": "timeseries"
     },
     {
@@ -733,6 +795,7 @@
         "y": 14
       },
       "id": 7,
+      "interval": "1s",
       "options": {
         "legend": {
           "calcs": [],
@@ -754,7 +817,7 @@
             "uid": "${DS_GRAFANACLOUD-WILLIEENGELBRECHTDEV-PROM}"
           },
           "editorMode": "code",
-          "expr": "m5stampFly_alt_ref{location=\"home\"}",
+          "expr": "m5stampFly_tof_front{location=\"home\"}",
           "instant": false,
           "legendFormat": "{{__name__}}",
           "range": true,
@@ -787,7 +850,7 @@
           "refId": "C"
         }
       ],
-      "title": "New Panel",
+      "title": "TOF Front",
       "type": "timeseries"
     }
   ],
@@ -798,13 +861,13 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "M5Stamp Fly",
   "uid": "aedkucc05k2rke",
-  "version": 2,
+  "version": 9,
   "weekStart": ""
 }

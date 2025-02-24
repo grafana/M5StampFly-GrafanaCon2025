@@ -30,7 +30,10 @@
 #include "sensor.hpp"
 #include "flight_control.hpp"
 
-#include <HTTPClient.h>
+#include <esp_now.h>
+#include <esp_wifi.h>
+
+//#include <HTTPClient.h>
 
 uint8_t Telem_mode     = 0;
 uint8_t Telem_cnt      = 0;
@@ -53,8 +56,6 @@ void data_set_uint8(uint8_t* datalist, uint8_t value, uint8_t* index);
 void telemetry(void) {
     uint8_t senddata[MAXINDEX];
 
-    sendHttpPost(); // Custom function to send metrics to Grafana Cloud
-
     if (Telem_mode == 0) {
         // Send header data
         Telem_mode = 1;
@@ -69,54 +70,6 @@ void telemetry(void) {
         Telem_cnt++;
         if (Telem_cnt > N - 1) Telem_cnt = 0;
         // telemetry_sequence();
-    }
-}
-
-// Function to send HTTP POST request to Grafana Cloud
-void sendHttpPost(void) {
-    if (WiFi.status() == WL_CONNECTED) {
-        HTTPClient http;
-
-        String grafana_username = "";
-        String grafana_password = "";
-        String grafana_url = "influx-blocks-prod-us-central1.grafana.net"; 
-
-        Serial.println("Sending HTTP POST request...");
-        http.begin("https://" + grafana_username + ":" + grafana_password + "@" + grafana_url + "/api/v1/push/influx/write");  // Specify the URL
-        http.addHeader("Content-Type", "application/json");  // Set content type
-
-
-    String postData = "";
-    // POST data to grafana cloud
-    postData = "m5stampFly,location=home voltage=" + String(Voltage)
-            + ",alt_ref=" + String(Alt_ref)
-            + ",altitude=" + String(Altitude)
-            + ",altitude2=" + String(Altitude2)
-            + ",Roll_angle=" + String(Roll_angle)
-            + ",Pitch_angle=" + String(Pitch_angle)
-            + ",Yaw_angle=" + String(Yaw_angle)
-            + ",Roll_rate=" + String(Roll_rate)
-            + ",Pitch_rate=" + String(Pitch_rate)
-            + ",Yaw_rate=" + String(Yaw_rate)
-            + ",Roll_angle_offset=" + String(Roll_angle_offset)
-            + ",Pitch_angle_offset=" + String(Pitch_angle_offset)
-            + ",Yaw_angle_offset=" + String(Yaw_angle_offset)
-            + ",Accel_x=" + String(Accel_x)
-            + ",Accel_y=" + String(Accel_y)
-            + ",Accel_z=" + String(Accel_z)
-            + ",Accel_z_d=" + String(Accel_z_d)
-            + ",Accel_x_raw=" + String(Accel_x_raw)
-            + ",Accel_y_raw=" + String(Accel_y_raw)
-            + ",Accel_z_raw=" + String(Accel_z_raw)
-            + ",RawRange=" + String(RawRange)
-            + ",Range=" + String(Range);  
-    
-        int httpResponseCode = http.POST(postData);
-        
-
-        http.end();  // Close connection
-    } else {
-        Serial.println("Wi-Fi not connected!");
     }
 }
 
