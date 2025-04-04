@@ -29,6 +29,8 @@
 #include <esp_wifi.h>
 #include "flight_control.hpp"
 
+#include "config.h"
+
 // esp_now_peer_info_t slave;
 
 volatile uint16_t Connect_flag = 0; 
@@ -46,7 +48,7 @@ volatile uint8_t peer_command[4] = {0xaa, 0x55, 0x16, 0x88};
 volatile uint8_t Rc_err_flag     = 0;
 esp_now_peer_info_t peerInfo;
 
-u_int8_t global_channel = 8;
+//u_int8_t global_channel = 9;
 
 // RC
 volatile float Stick[16];
