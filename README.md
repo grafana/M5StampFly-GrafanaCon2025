@@ -84,17 +84,18 @@ In your Grafana Cloud Portal, open up the details of your Grafana Instance
 1. Edit src/config.h:
 
     ```
-    #define WIFI_SSID "your-ssid"
-    #define WIFI_PASSWORD "your-password"
-    #define GRAFANA_URL "your-url"
-    #define GRAFANA_USER "your-user"
-    #define GRAFANA_TOKEN "your-token"
+    const char* ssid = "";  // Use a 2.4Ghz Wi-Fi hotspot
+    const char* password = "";
+
+    String grafana_username = "";
+    String grafana_password = "";
+    String grafana_url = ""; // example: influx-blocks-prod-us-central1.grafana.net
     ```
 
 1. Set the channel of your 2.4 GHz band wifi. The device only supports 2.4Ghz WiFi.
 
     ```
-    uint8_t global_channel = 8;
+    u_int8_t global_channel = 9;
     ```
 
     To check Wi-Fi channels:
@@ -112,7 +113,7 @@ In your Grafana Cloud Portal, open up the details of your Grafana Instance
 1. Edit `src/config.h` (only if changing Wi-Fi channel):
 
     ```
-    uint8_t global_channel = 8;
+    u_int8_t global_channel = 9;
     ```
 1. Connect via USB and upload
     > ⚠️ Both devices must use 2.4GHz Wi-Fi and be on the same channel. You might need to enable Client-to-Client (P2P) on your router.
