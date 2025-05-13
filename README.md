@@ -2,6 +2,8 @@
 
 ## Monitor drone telemetry with Grafana
 
+<img width="466" alt="Screenshot 2025-05-01 103108" src="https://github.com/user-attachments/assets/71b40b95-03ac-477c-b578-15084695bf37" />
+
 Build, flash, and fly your own IoT drone controller with live telemetry to **Grafana Cloud** using **ESP32 devices**.
 
 **This repository contains the code for the drone (M5Stamp Fly).**
